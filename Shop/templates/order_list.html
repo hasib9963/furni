@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+    <style>
+      .orders-section {
+        padding: 7rem 0;
+      }
+      .orders-wrap {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+      }
+      .orders-wrap h2 {
+        color: #2f2f2f;
+        font-weight: 700;
+        margin-bottom: 30px;
+      }
+      .order-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .order-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #e5e5e5;
+        font-weight: 600;
+      }
+      .order-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: middle;
+      }
+      .order-table tr:last-child td {
+        border-bottom: none;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+      }
+      .status-completed {
+        background-color: #28a745;
+      }
+      .status-processing {
+        background-color: #17a2b8;
+      }
+      .status-cancelled {
+        background-color: #dc3545;
+      }
+      .status-default {
+        background-color: #6c757d;
+      }
+      .view-link {
+        color: #2f2f2f;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .view-link:hover {
+        color: #28a745;
+      }
+      .empty-orders {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+      }
+    </style>
+{% endblock %}
+{% block body %}
+  <body>
+    <!-- Start Orders Section -->
+    <div class="orders-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="orders-wrap">
+              <h2>Your Orders</h2>
+              
+              {% if orders %}
+              <div class="table-responsive">
+                <table class="order-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Created At</th>
+                      <th>Status</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for order in orders %}
+                    <tr>
+                      <td>{{ order.id }}</td>
+                      <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                      <td>
+                        <span class="status-badge 
+                          {% if order.status == 'Completed' %}status-completed
+                          {% elif order.status == 'Processing' %}status-processing
+                          {% elif order.status == 'Cancelled' %}status-cancelled
+                          {% else %}status-default{% endif %}">
+                          {{ order.status }}
+                        </span>
+                      </td>
+                      <td>
+                        <a href="{% url 'order_detail' order.id %}" class="view-link">View Details</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="empty-orders">
+                <p>No orders found.</p>
+                <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Orders Section -->
+  </body>
+{% endblock %}
+</html>

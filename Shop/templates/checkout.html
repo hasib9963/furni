@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+{% block head %}
+    <style>
+      .checkout-section {
+        padding: 7rem 0;
+      }
+      .checkout-accordion-wrap {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 30px;
+      }
+      .card-header {
+        background: #f8f9fa;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+      .card-header button {
+        background: rgb(244, 248, 245);
+        color: #2f2f2f;
+        font-weight: 600;
+        text-decoration: none;
+        width: 100%;
+        text-align: left;
+      }
+      .billing-address-form input,
+      .billing-address-form textarea {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      .billing-address-form textarea {
+        min-height: 120px;
+      }
+      .order-details-wrap {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 30px;
+      }
+      .order-details {
+        width: 100%;
+      }
+      .order-details th {
+        font-weight: 700;
+        color: #2f2f2f;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .order-details td {
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .total-data {
+        font-weight: 600;
+      }
+    </style>
+{% endblock %}
+{% block body %}
+  <body>
+    <!-- Start Checkout Section -->
+    <div class="checkout-section mt-150 mb-150">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="checkout-accordion-wrap">
+              <div class="accordion" id="accordionExample">
+                <div class="card single-accordion">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Shipping Address
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <!-- Billing Address Form -->
+                      <div class="billing-address-form">
+                        <form method="POST" action="{% url 'place_order' %}">
+                          {% csrf_token %}
+                          <p><input type="text" name="name" placeholder="Name" required></p>
+                          <p><input type="email" name="email" placeholder="Email" required></p>
+                          <p><input type="text" name="billing_address" placeholder="Address" required></p>
+                          <p><input type="tel" name="phone" placeholder="Phone" required></p>
+                          <!-- Payment Method Selection -->
+                          <div class="mb-3">
+                              <h6>Payment Method</h6>
+                              <select class="form-select" name="payment_method" required>
+                                  <option value="" disabled selected>Select Payment Method</option>
+                                  <option value="Cash On Delivery">Cash On Delivery</option>
+                                  <option value="Online Payment">Online Payment</option>
+                              </select>
+                          </div>
+                          <p><textarea name="note" id="bill" cols="30" rows="2" placeholder="Your Message"></textarea></p>
+                          <input type="hidden" name="cart_id" value="{{ cart.id }}">
+                          <button type="submit" class="btn btn-primary">Place Order</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="order-details-wrap">
+              <table class="order-details">
+                <thead>
+                  <tr>
+                    <th>Your order Details</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody class="order-details-body">
+                  <tr>
+                    <td>Product</td>
+                    <td>Price</td>
+                  </tr>
+                  {% for item in items %}
+                  <tr class="table-body-row">
+                    <td class="product-name">{{ item.product.title }}</td>
+                    <td class="product-total">${{ item.get_total_price|floatformat:2 }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tbody>
+                  <tr class="total-data">
+                    <td><strong>Subtotal: </strong></td>
+                    <td>${{ subtotal|floatformat:2 }}</td>
+                  </tr>
+                  <tr class="total-data">
+                    <td><strong>Shipping: </strong></td>
+                    <td>${{ shipping_cost|floatformat:2 }}</td>
+                  </tr>
+                  <tr class="total-data">
+                    <td><strong>Total: </strong></td>
+                    <td>${{ total|floatformat:2 }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Checkout Section -->
+  {% endblock %}
+  </body>
+</html>

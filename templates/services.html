@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Services{% endblock %}
+{% block body %}
+  <body>
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Services</h1>
+								<p class="mb-4">You can get the best services in our website. Your home deserve the better look and feel.</p>
+								<p><a href="{% url "shop" %}" class="btn btn-secondary me-2">Shop Now</a><a href="{% url "home" %}" class="btn btn-white-outline">Explore</a></p>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="hero-img-wrap">
+								<img src="{% static 'images/couch.png' %}" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		<!-- Start Why Choose Us Section -->
+		<div class="why-choose-section">
+			<div class="container">
+				<div class="row my-5">
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/truck.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Fast &amp; Free Shipping</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/bag.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Easy to Shop</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/support.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>24/7 Support</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/return.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Hassle Free Returns</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/truck.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Fast &amp; Free Shipping</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/bag.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Easy to Shop</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/support.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>24/7 Support</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+
+					<div class="col-6 col-md-6 col-lg-3 mb-4">
+						<div class="feature">
+							<div class="icon">
+								<img src="{% static 'images/return.svg' %}" alt="Image" class="imf-fluid">
+							</div>
+							<h3>Hassle Free Returns</h3>
+							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Why Choose Us Section -->
+
+		<!-- Start Product Section -->
+		<div class="product-section pt-0">
+			<div class="container">
+				<div class="row">
+					<!-- Start Column 1 -->
+					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+						<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+						<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
+						<p><a href="#" class="btn">Explore</a></p>
+					</div> 
+					<!-- End Column 1 -->
+
+					<!-- Start Column 2 -->
+					 {% for p in data|slice:":3" %}
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<div class="product-item">
+							<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">{{p.title}}</h3>
+							<strong class="product-price">{{p.price}}৳</strong>
+							<span class="icon-cross" onclick="addToCart('{% url 'add_to_cart' p.id %}')" style="cursor:pointer;">
+								<img src="{% static 'images/cross.svg' %}">
+							</span>
+						</div>
+					</div>
+					{% endfor %} 
+					<!-- End Column 2 -->
+				</div>
+			</div>
+		</div>
+		<!-- End Product Section -->
+
+	<!-- Start Testimonial Slider -->
+    <div class="testimonial-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7 mx-auto text-center">
+            <h2 class="section-title">Testimonials</h2>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <div class="testimonial-slider-wrap text-center">
+              <div id="testimonial-nav">
+                <span class="prev" data-controls="prev"
+                  ><span class="fa fa-chevron-left"></span
+                ></span>
+                <span class="next" data-controls="next"
+                  ><span class="fa fa-chevron-right"></span
+                ></span>
+              </div>
+
+              <div class="testimonial-slider">
+                <div class="item">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-8 mx-auto">
+                      <div class="testimonial-block text-center">
+                        <blockquote class="mb-5">
+                          <p>
+                            &ldquo;This is best platform for Home decoration and interior design. You can find here any types of furnuture and home equipments. I can suggest this site easily for anyone.&rdquo;
+                          </p>
+                        </blockquote>
+
+                        <div class="author-info">
+                          <div class="author-pic">
+                            <img
+                              src="{% static 'images/person-1.png' %}"
+                              alt="Maria Jones"
+                              class="img-fluid"
+                            />
+                          </div>
+                          <h3 class="font-weight-bold">Maria Jones</h3>
+                          <span class="position d-block mb-3"
+                            >CEO, Co-Founder, Abstarct Inc.</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END item -->
+
+                <div class="item">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-8 mx-auto">
+                      <div class="testimonial-block text-center">
+                        <blockquote class="mb-5">
+                          <p>
+                            &ldquo;One of finest site to buy any furniture for reasonable prices.&rdquo;
+                          </p>
+                        </blockquote>
+
+                        <div class="author-info">
+                          <div class="author-pic">
+                            <img
+                              src="{% static 'images/person_2.jpg' %}"
+                              alt="Adam Stepen"
+                              class="img-fluid"
+                            />
+                          </div>
+                          <h3 class="font-weight-bold">Adam Stepen</h3>
+                          <span class="position d-block mb-3"
+                            >CEO, Co-Founder, cyber service LTD.</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END item -->
+
+                <div class="item">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-8 mx-auto">
+                      <div class="testimonial-block text-center">
+                        <blockquote class="mb-5">
+                          <p>
+                            &ldquo;Thanks for making my home Beautifull and reluxing&rdquo;
+                          </p>
+                        </blockquote>
+
+                        <div class="author-info">
+                          <div class="author-pic">
+                            <img
+                              src="{% static 'images/person_4.jpg' %}"
+                              alt="Ketty"
+                              class="img-fluid"
+                            />
+                          </div>
+                          <h3 class="font-weight-bold">Ketty Williams</h3>
+                          <span class="position d-block mb-3"
+                            >Housewife</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END item -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Testimonial Slider -->
+    <script>
+        function addToCart(url) {
+            fetch(url + '?next={{ request.path }}', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showPopup(data.message);
+
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = data.cart_count;
+                    }
+                } else {
+                    console.error("Add to cart failed:", data);
+                }
+            })
+            .catch(err => console.error("Fetch error:", err));
+        }
+
+        function showPopup(message) {
+            const popup = document.createElement('div');
+            popup.textContent = message;
+            
+            // Default styles for large/medium devices
+            const popupStyles = {
+                position: 'fixed',
+                bottom: '20px',
+                right: '20px',
+                backgroundColor: '#28a745',
+                color: '#fff',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                zIndex: '9999',
+                boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+            };
+
+            // Check if mobile device (you can adjust this breakpoint)
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                // Mobile-specific styles
+                Object.assign(popupStyles, {
+                    left: '40%',
+                    right: 'auto',
+                    transform: 'translateX(-70%)',
+                    width: '90%',
+                    maxWidth: '200px',
+                    textAlign: 'center',
+                    fontSize: '14px'
+                });
+            }
+
+            Object.assign(popup.style, popupStyles);
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                popup.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(() => popup.remove(), 300);
+            }, 1000);
+        }
+    </script>
+	</body>
+{% endblock %}
+</html>

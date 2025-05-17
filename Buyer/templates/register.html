@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Register{% endblock %}
+{% block head %}
+    <style>
+      .register-section {
+        padding: 7rem 0;
+      }
+      .form-v4-content {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .form-left {
+        background:rgb(75, 159, 152);
+        color: #fff;
+        padding: 40px 35px;
+        width: 40%;
+        position: relative;
+      }
+      .form-left h2 {
+        color: #fff;
+        font-weight: 700;
+        font-size: 28px;
+        margin-bottom: 25px;
+      }
+      .form-left .text-1 {
+        margin-bottom: 30px;
+        font-size: 15px;
+        line-height: 1.8;
+      }
+      .form-left .text-2 {
+        font-size: 15px;
+        line-height: 1.8;
+      }
+      .form-left .text-2 span {
+        font-weight: 700;
+      }
+      .form-left .account {
+        background: #fff;
+        color: #2f2f2f;
+        border-radius: 5px;
+        padding: 12px 0;
+        width: 100%;
+        border: none;
+        margin-top: 30px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+      .form-left .account:hover {
+        background: #f8f9fa;
+      }
+      .form-detail {
+        padding: 40px 35px;
+        width: 60%;
+      }
+      .form-detail h2 {
+        color: #2f2f2f;
+        font-weight: 700;
+        font-size: 28px;
+        margin-bottom: 25px;
+        position: relative;
+      }
+      .form-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .form-row {
+        width: 48%;
+      }
+      .form-row label {
+        display: block;
+        margin-bottom: 8px;
+        color: #666;
+        font-size: 14px;
+      }
+      .input-text {
+        width: 100%;
+        padding: 11px 15px;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        outline: none;
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+      }
+      .input-text:focus {
+        border-color: #2f2f2f;
+      }
+      .text-red {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 0;
+      }
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .error-message .error-text {
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+      .error-message ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .form-row-last {
+        text-align: center;
+        margin-top: 30px;
+      }
+      .register {
+        background: #2f2f2f;
+        color: #fff;
+        border-radius: 5px;
+        padding: 12px 0;
+        width: 100%;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+      .register:hover {
+        background: #3a3a3a;
+      }
+      .login-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+      .login-link a {
+        color: #2f2f2f;
+        text-decoration: underline;
+      }
+      .login-link a:hover {
+        color: #000;
+      }
+      @media (max-width: 991px) {
+        .form-v4-content {
+          flex-direction: column;
+        }
+        .form-left, .form-detail {
+          width: 100%;
+        }
+        .form-left {
+          padding: 30px 25px;
+        }
+        .form-detail {
+          padding: 30px 25px;
+        }
+      }
+      @media (max-width: 575px) {
+        .form-row {
+          width: 100%;
+        }
+      }
+    </style>
+{% endblock %}
+
+{% block body %}
+  <body>
+    <!-- Start Register Section -->
+    <div class="register-section">
+      <div class="container">
+        <div class="form-v4-content">
+          <div class="form-left">
+            <h2>INFORMATION</h2>
+            <p class="text-1">Welcome to Furni, your destination for modern interior design. Create an account to enjoy a seamless shopping experience.</p>
+            <p class="text-2"><span>Benefits include:</span> Faster checkout, order tracking, wishlist saving, and exclusive member discounts.</p>
+            <div class="form-left-last">
+              <a href="{% url 'login' %}" class="account">Have An Account</a>
+            </div>
+          </div>
+          <form class="form-detail" action="{% url 'register' %}" method="post" id="myform">
+            {% csrf_token %}
+            <h2>REGISTER FORM</h2>
+
+            <!-- Error Message for Non-Field Errors -->
+            {% if form.non_field_errors %}
+            <div class="error-message">
+              <p class="error-text">There was an issue with your submission:</p>
+              <ul>
+                {% for error in form.non_field_errors %}
+                <li class="text-red">{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+              <div class="form-row form-row-1">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="input-text"
+                  value="{{ form.username.value|default_if_none:'' }}" required>
+                {% if form.username.errors %}
+                <p class="text-red">{{ form.username.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="form-row form-row-1">
+                <label for="your_email">Email</label>
+                <input type="email" name="email" id="your_email" class="input-text"
+                  value="{{ form.email.value|default_if_none:'' }}" required>
+                {% if form.email.errors %}
+                <p class="text-red">{{ form.email.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-row form-row-1">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="input-text"
+                  value="{{ form.first_name.value|default_if_none:'' }}" required>
+                {% if form.first_name.errors %}
+                <p class="text-red">{{ form.first_name.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="form-row form-row-1">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="input-text"
+                  value="{{ form.last_name.value|default_if_none:'' }}" required>
+                {% if form.last_name.errors %}
+                <p class="text-red">{{ form.last_name.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-row form-row-1">
+                <label for="password1">Password</label>
+                <input type="password" name="password1" id="password1" class="input-text" required>
+                {% if form.password1.errors %}
+                <p class="text-red">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div class="form-row form-row-1">
+                <label for="password2">Confirm Password</label>
+                <input type="password" name="password2" id="password2" class="input-text" required>
+                {% if form.password2.errors %}
+                <p class="text-red">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-row-last">
+              <input type="submit" name="register" class="register" value="Register">
+            </div>
+            <div class="login-link">
+              Already have an account? <a href="{% url 'login' %}">Log In</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- End Register Section -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('myform');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();  // Prevent default form submission
+
+                // Show success popup immediately
+                const popup = showPopup("Account created successfully! Please check your email to activate account", "#28a745");
+
+                // Trigger redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = "{% url 'login' %}";
+                }, 3000);
+
+                // Send form data in background (email sending etc.)
+                const formData = new FormData(form);
+                fetch("{% url 'register' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .catch(err => {
+                    console.error('Background error:', err);
+                });
+            });
+
+            function showPopup(message, color = "#007bff") {
+                const popup = document.createElement('div');
+                popup.textContent = message;
+                Object.assign(popup.style, {
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: color,
+                    color: '#fff',
+                    padding: '12px 20px',
+                    borderRadius: '8px',
+                    zIndex: '9999',
+                    opacity: '0',
+                    transition: 'opacity 0.5s ease-in-out'
+                });
+                document.body.appendChild(popup);
+                setTimeout(() => popup.style.opacity = '1', 50);
+                setTimeout(() => popup.remove(), 3000);
+                return popup;
+            }
+        });
+    </script>
+
+ </body>
+{% endblock %}
+</html>

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Order #{{ order.id }} | Details{% endblock %}
+{% block head %}
+    <style>
+      .order-detail-section {
+        padding: 7rem 0;
+      }
+      .order-detail-wrap {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+      }
+      .order-detail-wrap h2 {
+        color: #2f2f2f;
+        font-weight: 700;
+        margin-bottom: 30px;
+      }
+      .order-detail-wrap h3 {
+        color: #2f2f2f;
+        font-weight: 600;
+        margin: 30px 0 20px;
+      }
+      .order-info p {
+        margin-bottom: 15px;
+        font-size: 16px;
+      }
+      .order-info strong {
+        color: #2f2f2f;
+        font-weight: 600;
+        display: inline-block;
+        width: 150px;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+      }
+      .status-completed {
+        background-color: #28a745;
+      }
+      .status-processing {
+        background-color: #17a2b8;
+      }
+      .status-cancelled {
+        background-color: #dc3545;
+      }
+      .status-default {
+        background-color: #6c757d;
+      }
+      .order-items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+      }
+      .order-items-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #e5e5e5;
+        font-weight: 600;
+      }
+      .order-items-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: middle;
+      }
+      .order-items-table tr:last-child td {
+        border-bottom: none;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: #2f2f2f;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .back-link:hover {
+        color: #28a745;
+      }
+      .back-link i {
+        margin-right: 8px;
+      }
+      hr {
+        border-color: #e5e5e5;
+        margin: 30px 0;
+      }
+    </style>
+  {% endblock %}
+  {% block body %}
+  <body>
+    <!-- Start Order Detail Section -->
+    <div class="order-detail-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="order-detail-wrap">
+              <h2>Order #{{ order.id }} Details</h2>
+              
+              <div class="order-info">
+                <p><strong>Date:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
+                <p><strong>Status:</strong> 
+                  <span class="status-badge 
+                    {% if order.status == 'Completed' %}status-completed
+                    {% elif order.status == 'Processing' %}status-processing
+                    {% elif order.status == 'Cancelled' %}status-cancelled
+                    {% else %}status-default{% endif %}">
+                    {{ order.status }}
+                  </span>
+                </p>
+                <p><strong>Total Price:</strong> {{ order.total_price }} ৳</p>
+                <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+                {% if order.note %}
+                <p><strong>Note:</strong> {{ order.note }}</p>
+                {% endif %}
+              </div>
+
+              <hr>
+
+              <h3>Order Items</h3>
+              <table class="order-items-table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in items %}
+                  <tr>
+                    <td><img style="width: 75px; height: 75px;" src="{{item.product.image.url}}" alt="img"></td>
+                    <td>{{ item.product.title }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }} ৳</td>
+                    <td>{{ item.get_total_price }} ৳</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <a href="{% url 'user_orders' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back To Your Order List
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Order Detail Section -->
+  {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Hi {{ name }},</h2>
+    <p>Thank you for your order!</p>
+
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+    <p><strong>Total Price:</strong> {{ order.total_price }} Tk</p>
+
+    <h3>Order Items:</h3>
+    <ul>
+        {% for item in order_items %}
+        <li>{{ item.product.title }} - Quantity: {{ item.quantity }} - Price: {{ item.price }} Tk</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Billing Info:</h3>
+    <p>{{ billing_address }}</p>
+
+    {% if note %}
+    <p><strong>Note:</strong> {{ note }}</p>
+    {% endif %}
+
+    <p>We will contact you soon regarding your delivery.</p>
+
+    <p>Best regards,<br><strong>Furni</strong></p>
+</body>
+</html>

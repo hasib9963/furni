@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Online Payment{% endblock %}
+{% block head %}
+  <style>
+  .payment-section {
+        padding: 7rem 0;
+      }
+      .card0 {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      #sidebar-wrapper {
+        min-height: 100vh;
+        background: #f8f9fa;
+        border-right: 1px solid #e5e5e5;
+      }
+      .sidebar-heading {
+        color: #2f2f2f;
+        font-weight: 600;
+        text-align: center;
+      }
+      .list-group-item {
+        border: none;
+        border-radius: 0;
+        padding: 1rem 1.5rem;
+        color: #2f2f2f;
+        transition: all 0.3s ease;
+      }
+      .list-group-item:hover {
+        background-color: rgba(40, 167, 69, 0.1);
+      }
+      .active1 {
+        background-color: #28a745 !important;
+        color: white !important;
+      }
+      .list-div {
+        display: flex;
+        align-items: center;
+      }
+      #new-label {
+        background: #ff6b6b;
+        color: white;
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-left: 10px;
+      }
+      #border-btm {
+        border-bottom: 1px solid #e5e5e5;
+        padding-bottom: 1rem;
+      }
+      .form-card {
+        padding: 2rem;
+      }
+      .form-card h3 {
+        color: #2f2f2f;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+      .form-control {
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+      }
+      .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+      .btn-primary {
+        background: #2f2f2f;
+        border: none;
+        padding: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background: #28a745;
+      }
+      #qr {
+        text-align: center;
+        margin: 2rem 0;
+      }
+      .cod-content {
+        padding: 2rem;
+        text-align: center;
+      }
+      .cod-content h3 {
+        color: #2f2f2f;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+      .cod-content p {
+        color: #6c757d;
+        margin-bottom: 2rem;
+      }
+      .cod-icon {
+        font-size: 3rem;
+        color: #28a745;
+        margin-bottom: 1.5rem;
+      }
+      @media (max-width: 768px) {
+        #sidebar-wrapper {
+          min-height: auto;
+          width: 100%;
+        }
+        #page-content-wrapper {
+          width: 100%;
+        }
+      }
+    </style>
+  {% endblock %}
+
+  {% block body %}
+  <body>
+    <!-- Payment Section -->
+    <div class="payment-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="card card0">
+              <div class="d-flex" id="wrapper">
+                <!-- Sidebar -->
+                <div class="bg-light border-right" id="sidebar-wrapper">
+                  <div class="sidebar-heading pt-5 pb-4">
+                    <strong>PAYMENT METHODS</strong>
+                  </div>
+                  <div class="list-group list-group-flush">
+                    <a data-toggle="tab" href="#menu1" id="tab1" class="tabs list-group-item bg-light">
+                      <div class="list-div my-2">
+                        <i class="fas fa-university"></i>
+                        &nbsp;&nbsp; Bank Transfer
+                      </div>
+                    </a>
+                    <a data-toggle="tab" href="#menu2" id="tab2" class="tabs list-group-item active1">
+                      <div class="list-div my-2">
+                        <i class="far fa-credit-card"></i>
+                        &nbsp;&nbsp; Credit/Debit Card
+                      </div>
+                    </a>
+                    <a data-toggle="tab" href="#menu3" id="tab3" class="tabs list-group-item bg-light">
+                      <div class="list-div my-2">
+                        <i class="fas fa-qrcode"></i>
+                        &nbsp;&nbsp; Bkash QR
+                        <span id="new-label">NEW</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+                  <div class="row pt-3" id="border-btm">
+                    <div class="col-4">
+                    </div>
+                    <div class="col-8">
+                      <div class="row justify-content-right">
+                        <div class="col-12">
+                          <p class="mb-0 mr-4 mt-4 text-right">
+                            Order Total: <strong>{{ total }} ৳</strong>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tabs Content -->
+                  <div class="tab-content">
+                    <!-- Bank Transfer -->
+                    <div id="menu1" class="tab-pane fade">
+                      <div class="row justify-content-center">
+                        <div class="col-11">
+                          <div class="form-card">
+                            <h3 class="mt-0 mb-4 text-center">Bank Transfer</h3>
+                            <form>
+                              <div class="form-group">
+                                <label>Bank Name</label>
+                                <input type="text" class="form-control" placeholder="Enter bank name" />
+                              </div>
+                              <div class="form-group">
+                                <label>Account Number</label>
+                                <input type="text" class="form-control" placeholder="Enter account number" />
+                              </div>
+                              <a href="{% url 'payment_success' %}" class="btn btn-primary btn-block">
+                                Confirm Payment
+                              </a>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Credit/Debit Card -->
+                    <div id="menu2" class="tab-pane fade show active">
+                      <div class="row justify-content-center">
+                        <div class="col-11">
+                          <div class="form-card">
+                            <h3 class="mt-0 mb-4 text-center">Credit/Debit Card</h3>
+                            <form>
+                              <div class="form-group">
+                                <label>Card Number</label>
+                                <input type="text" class="form-control" placeholder="Enter card number" />
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" />
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" class="form-control" placeholder="CVV" />
+                                  </div>
+                                </div>
+                              </div>
+                              <a href="{% url 'payment_success' %}" class="btn btn-primary btn-block">
+                                Pay Now
+                              </a>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Bkash QR -->
+                    <div id="menu3" class="tab-pane fade">
+                      <div class="row justify-content-center">
+                        <div class="col-11">
+                          <h3 class="mt-0 mb-4 text-center">Scan to Pay with bKash</h3>
+                          <div class="row justify-content-center">
+                            <div id="qr">
+                              <img src="{% static 'images/bkash.jpg' %}" width="300" alt="bKash QR Code" />
+                            </div>
+                          </div>
+                          <div class="text-center mt-3">
+                            <a href="{% url 'payment_success' %}" class="btn btn-primary">
+                              I've Made the Payment
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Toggle sidebar on mobile
+      $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+
+      // Change active tab style
+      $(".tabs").click(function() {
+        $(".tabs").removeClass("active1").addClass("bg-light");
+        $(this).removeClass("bg-light").addClass("active1");
+      });
+    </script>
+  </body>
+{% endblock %}
+</html>

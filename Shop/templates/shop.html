@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Shop{% endblock%}
+{% block body %}
+  <body>
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Shop</h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		
+
+		<div class="untree_co-section product-section before-footer-section">
+		    <div class="container">
+		      	<div class="row">
+
+		      		<!-- Start Column 1 -->
+					 {% for p in data %}
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<div class="product-item">
+							<img src="{{p.image.url}}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">{{p.title}}</h3>
+							<strong class="product-price">{{p.price}}৳</strong>
+
+							<span class="icon-cross" onclick="addToCart('{% url 'add_to_cart' p.id %}')" style="cursor:pointer;">
+								<img src="{% static 'images/cross.svg' %}">
+							</span>
+
+						</div>
+					</div> 
+					{% endfor %}
+					<!-- End Column 1 -->
+		      	</div>
+		    </div>
+		</div>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script>
+			function addToCart(url) {
+				fetch(url + '?next={{ request.path }}', {
+					method: 'GET',
+					headers: {
+						'X-Requested-With': 'XMLHttpRequest'
+					}
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						showPopup(data.message);
+
+						const cartCount = document.getElementById('cart-count');
+						if (cartCount) {
+							cartCount.textContent = data.cart_count;
+						}
+					} else {
+						console.error("Add to cart failed:", data);
+					}
+				})
+				.catch(err => console.error("Fetch error:", err));
+			}
+
+			function showPopup(message) {
+				const popup = document.createElement('div');
+				popup.textContent = message;
+				Object.assign(popup.style, {
+					position: 'fixed',
+					bottom: '20px',
+					right: '20px',
+					backgroundColor: '#28a745',
+					color: '#fff',
+					padding: '10px 20px',
+					borderRadius: '8px',
+					zIndex: '9999',
+					boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+				});
+				document.body.appendChild(popup);
+				setTimeout(() => popup.remove(), 1000);
+			}
+		</script>
+	</body>
+{% endblock%}
+</html>

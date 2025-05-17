@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block head %}
+    <style>
+      .login-section {
+        padding: 7rem 0;
+      }
+      .login-wrap {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+      }
+      .login-wrap .heading-section {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2f2f2f;
+        margin-bottom: 30px;
+      }
+      .login-wrap h3 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2f2f2f;
+        margin-bottom: 30px;
+      }
+      .form-control {
+        height: 50px;
+        border-radius: 5px;
+        border: 1px solid #e5e5e5;
+        padding: 0 15px;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .form-control:focus {
+        border-color: #2f2f2f;
+        box-shadow: none;
+      }
+      .btn-primary {
+        background: #2f2f2f;
+        border: none;
+        color: #fff;
+        padding: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background: #3a3a3a;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        border: none;
+      }
+      .checkbox-wrap {
+        display: block;
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        user-select: none;
+      }
+      .checkbox-wrap input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+      }
+      .checkbox-wrap:hover input ~ .checkmark {
+        background-color: #f1f1f1;
+      }
+      .checkbox-wrap input:checked ~ .checkmark {
+        background-color: #2f2f2f;
+      }
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+      .checkbox-wrap input:checked ~ .checkmark:after {
+        display: block;
+      }
+      .checkbox-wrap .checkmark:after {
+        left: 7px;
+        top: 3px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .field-icon {
+        float: right;
+        margin-right: 15px;
+        margin-top: -35px;
+        position: relative;
+        z-index: 2;
+        color: #666;
+        cursor: pointer;
+      }
+      .signup-link {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .signup-link a {
+        color: #2f2f2f;
+        text-decoration: underline;
+      }
+      .signup-link a:hover {
+        color: #000;
+      }
+      .forgot-password {
+        color: #2f2f2f !important;
+        text-decoration: underline !important;
+      }
+      .forgot-password:hover {
+        color: #000 !important;
+      }
+    </style>
+{% endblock %}
+
+{% block body %}
+  <body>
+    <!-- Start Login Section -->
+    <div class="login-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 text-center mb-5">
+            <h2 class="heading-section">Login to Your Account</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <div class="login-wrap p-4 p-md-5">
+              <h3 class="text-center mb-4">Welcome Back</h3>
+              <form method="POST" class="signin-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                  {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                  <input type="text" name="username" class="form-control" placeholder="Username" required
+                    value="{{ form.username.value|default_if_none:'' }}">
+                  {% if form.username.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.username.errors.0 }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="form-group">
+                  <input id="password-field" type="password" name="password" class="form-control"
+                    placeholder="Password" required>
+                  {% if form.password.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.password.errors.0 }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="form-group d-flex justify-content-between align-items-center">
+                  <div class="w-50">
+                    <label class="checkbox-wrap checkbox-primary">Remember Me
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="w-50 text-end">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                </div>
+              </form>
+              <div class="signup-link text-center mt-4">
+                Don't have an account? <a href="{% url 'register' %}">Sign Up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Login Section -->
+    <script>
+      (function($) {
+        $(".toggle-password").click(function() {
+          $(this).toggleClass("fa-eye fa-eye-slash");
+          var input = $($(this).attr("toggle"));
+          if (input.attr("type") == "password") {
+            input.attr("type", "text");
+          } else {
+            input.attr("type", "password");
+          }
+        });
+      })(jQuery);
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const form = document.querySelector('.signin-form');
+
+          form.addEventListener('submit', function (e) {
+              e.preventDefault();
+
+              const formData = new FormData(form);
+
+              fetch("{% url 'login' %}", {
+                  method: 'POST',
+                  headers: {
+                      'X-Requested-With': 'XMLHttpRequest',
+                  },
+                  body: formData
+              })
+              .then(async res => {
+                  const data = await res.json();
+
+                  if (res.ok && data.success) {
+                      showPopup(data.message, '#28a745');
+                      setTimeout(() => {
+                          window.location.href = data.redirect_url;
+                      }, 1000);
+                  } else {
+                      const errors = data.errors;
+                      if (errors?.__all__) {
+                          const message = errors.__all__[0];
+
+                          if (message === "Please activate your account first.") {
+                              showPopup(message, '#dc3545');
+                          } else {
+                              // For non-registered users — fallback to default Django form error
+                              form.submit();  // Reload page and let Django render errors
+                          }
+                      } else {
+                          form.submit();  // Fallback for any unknown error
+                      }
+                  }
+              })
+              .catch(err => {
+                  console.error("Login error:", err);
+              });
+          });
+
+          function showPopup(message, bgColor = '#007bff') {
+              const popup = document.createElement('div');
+              popup.textContent = message;
+              Object.assign(popup.style, {
+                  position: 'fixed',
+                  bottom: '20px',
+                  right: '20px',
+                  backgroundColor: bgColor,
+                  color: '#fff',
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  zIndex: '9999',
+                  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
+                  opacity: '1',
+                  transition: 'opacity 0.3s'
+              });
+              document.body.appendChild(popup);
+              setTimeout(() => {
+                  popup.style.opacity = '0';
+                  setTimeout(() => popup.remove(), 300);
+              }, 1000);  // 1 seconds
+          }
+      });
+    </script>
+    
+  </body>
+{% endblock %}
+</html>
