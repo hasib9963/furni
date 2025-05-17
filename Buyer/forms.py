@@ -13,10 +13,6 @@ class RegistrationForm(UserCreationForm):
 
 
 from django.contrib.auth.forms import AuthenticationForm
-# from django.contrib.auth import authenticate, get_user_model
-
-# User = get_user_model()
-
 class CustomAuthenticationForm(AuthenticationForm):
     def clean(self):
         username = self.cleaned_data.get('username')

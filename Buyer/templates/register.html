@@ -261,58 +261,79 @@
     </div>
     <!-- End Register Section -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('myform');
+      document.addEventListener('DOMContentLoaded', function () {
+          const form = document.getElementById('myform');
 
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();  // Prevent default form submission
+          form.addEventListener('submit', function (e) {
+              e.preventDefault();  // Prevent default form submission
 
-                // Show success popup immediately
-                const popup = showPopup("Account created successfully! Please check your email to activate account", "#28a745");
+              const formData = new FormData(form);
 
-                // Trigger redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = "{% url 'login' %}";
-                }, 3000);
+              fetch("{% url 'register' %}", {
+                  method: 'POST',
+                  headers: {
+                      'X-Requested-With': 'XMLHttpRequest',
+                  },
+                  body: formData
+              })
+              .then(res => res.json())
+              .then(data => {
+                  if (data.success) {
+                      // ✅ Only show popup on success
+                      showPopup(data.message, "#28a745");
 
-                // Send form data in background (email sending etc.)
-                const formData = new FormData(form);
-                fetch("{% url 'register' %}", {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: formData
-                })
-                .then(res => res.json())
-                .catch(err => {
-                    console.error('Background error:', err);
-                });
-            });
+                      // ✅ Redirect after showing message
+                      setTimeout(() => {
+                          window.location.href = data.redirect_url;
+                      }, 3000);
+                  } else if (data.errors) {
+                      // 🛑 Show errors
+                      displayFormErrors(data.errors);
+                      showPopup("Please fix the errors in the form.", "#dc3545");
+                  }
+              })
+              .catch(err => {
+                  console.error('Background error:', err);
+                  showPopup("An unexpected error occurred.", "#dc3545");
+              });
+          });
 
-            function showPopup(message, color = "#007bff") {
-                const popup = document.createElement('div');
-                popup.textContent = message;
-                Object.assign(popup.style, {
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    backgroundColor: color,
-                    color: '#fff',
-                    padding: '12px 20px',
-                    borderRadius: '8px',
-                    zIndex: '9999',
-                    opacity: '0',
-                    transition: 'opacity 0.5s ease-in-out'
-                });
-                document.body.appendChild(popup);
-                setTimeout(() => popup.style.opacity = '1', 50);
-                setTimeout(() => popup.remove(), 3000);
-                return popup;
-            }
-        });
+          function showPopup(message, color = "#007bff") {
+              const popup = document.createElement('div');
+              popup.textContent = message;
+              Object.assign(popup.style, {
+                  position: 'fixed',
+                  bottom: '20px',
+                  right: '20px',
+                  backgroundColor: color,
+                  color: '#fff',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  zIndex: '9999',
+                  opacity: '0',
+                  transition: 'opacity 0.5s ease-in-out'
+              });
+              document.body.appendChild(popup);
+              setTimeout(() => popup.style.opacity = '1', 50);
+              setTimeout(() => popup.remove(), 3000);
+          }
+
+          function displayFormErrors(errors) {
+              // Clear previous errors
+              document.querySelectorAll('.text-red').forEach(el => el.remove());
+
+              for (let field in errors) {
+                  const input = document.querySelector(`[name="${field}"]`);
+                  if (input) {
+                      const error = document.createElement('p');
+                      error.classList.add('text-red');
+                      error.textContent = errors[field][0];
+                      input.parentNode.appendChild(error);
+                  }
+              }
+          }
+      });
     </script>
-
  </body>
 {% endblock %}
 </html>
