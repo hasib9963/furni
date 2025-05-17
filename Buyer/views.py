@@ -17,29 +17,6 @@ from django.views import View
 from django.http import HttpResponse
 # Create your views here.
 
-
-# class RegisterView(FormView):
-#     template_name = 'register.html'
-#     form_class = RegistrationForm
-#     success_url = reverse_lazy('login')
-
-#     def form_valid(self, form):
-#         form.save()
-#         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#             return JsonResponse({
-#                 'success': True,
-#                 'message': 'Account created successfully',
-#                 'redirect_url': str(self.success_url)
-#             })
-#         messages.success(self.request, 'Account created successfully')
-#         return super().form_valid(form)
-
-#     def form_invalid(self, form):
-#         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
-#         messages.error(self.request, 'Please correct the errors below.')
-#         return super().form_invalid(form)
-
 class RegisterView(FormView):
     template_name = 'register.html'
     form_class = RegistrationForm
@@ -53,7 +30,8 @@ class RegisterView(FormView):
         # Send activation email
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        confirm_link = f"http://127.0.0.1:8000/buyer/activate/{uid}/{token}/"
+        # confirm_link = f"http://127.0.0.1:8000/buyer/activate/{uid}/{token}/"
+        confirm_link = f"https://furni-qnpo.onrender.com/buyer/activate/{uid}/{token}/"
 
         email_subject = "Account Activation"
         email_body = render_to_string('confirmation_email.html', {
