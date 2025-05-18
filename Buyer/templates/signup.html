@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Register{% endblock %}
+{% block title %}SignUp{% endblock %}
 {% block head %}
     <style>
-      .register-section {
+      .signup-section {
         padding: 7rem 0;
       }
       .form-v4-content {
@@ -116,7 +116,7 @@
         text-align: center;
         margin-top: 30px;
       }
-      .register {
+      .signup {
         background: #2f2f2f;
         color: #fff;
         border-radius: 5px;
@@ -127,7 +127,7 @@
         font-weight: 700;
         transition: all 0.3s ease;
       }
-      .register:hover {
+      .signup:hover {
         background: #4B9F98;
       }
       .login-link {
@@ -166,8 +166,8 @@
 
 {% block body %}
   <body>
-    <!-- Start Register Section -->
-    <div class="register-section">
+    <!-- Start SignUp Section -->
+    <div class="signup-section">
       <div class="container">
         <div class="form-v4-content">
           <div class="form-left">
@@ -178,9 +178,9 @@
               <a href="{% url 'login' %}" class="account">Have An Account</a>
             </div>
           </div>
-          <form class="form-detail" action="{% url 'register' %}" method="post" id="myform">
+          <form class="form-detail" action="{% url 'signup' %}" method="post" id="myform">
             {% csrf_token %}
-            <h2>REGISTER FORM</h2>
+            <h2>SignUp FORM</h2>
 
             <!-- Error Message for Non-Field Errors -->
             {% if form.non_field_errors %}
@@ -250,7 +250,7 @@
             </div>
 
             <div class="form-row-last">
-              <input type="submit" name="register" class="register" value="Register">
+              <input type="submit" name="signup" class="signup" value="SignUp">
             </div>
             <div class="login-link">
               Already have an account? <a href="{% url 'login' %}">Log In</a>
@@ -259,7 +259,7 @@
         </div>
       </div>
     </div>
-    <!-- End Register Section -->
+    <!-- End SignUp Section -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
           const form = document.getElementById('myform');
@@ -269,7 +269,7 @@
 
               const formData = new FormData(form);
 
-              fetch("{% url 'register' %}", {
+              fetch("{% url 'signup' %}", {
                   method: 'POST',
                   headers: {
                       'X-Requested-With': 'XMLHttpRequest',

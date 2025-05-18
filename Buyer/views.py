@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import FormView
-from .forms import RegistrationForm
+from .forms import SignUpForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import logout, get_user_model
@@ -17,9 +17,9 @@ from django.views import View
 from django.http import HttpResponse
 # Create your views here.
 
-class RegisterView(FormView):
-    template_name = 'register.html'
-    form_class = RegistrationForm
+class SignUpView(FormView):
+    template_name = 'signup.html'
+    form_class = SignUpForm
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
