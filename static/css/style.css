@@ -166,9 +166,10 @@ a {
   background: #2f2f2f;
   border-color: #2f2f2f; }
   .btn:hover {
-    color: #ffffff;
-    background: #222222;
-    border-color: #222222; }
+    color: #222222;
+    background: transparent;
+    border-width: 2px;
+    border-color: #2f2f2f; } 
   .btn:active, .btn:focus {
     outline: none !important;
     -webkit-box-shadow: none;
@@ -184,8 +185,9 @@ a {
     background: #f9bf29;
     border-color: #f9bf29; }
     .btn.btn-secondary:hover {
-      background: #f8b810;
-      border-color: #f8b810; }
+      color: #ffff;
+      background: #314d43;
+      border-color: #314d43; }
   .btn.btn-white-outline {
     background: transparent;
     border-width: 2px;
@@ -193,6 +195,50 @@ a {
     .btn.btn-white-outline:hover {
       border-color: white;
       color: #ffffff; }
+
+.btn-primary-hover-outline{
+  color: white;
+  background: #336F6A;
+  border: 1px solid #336F6A;
+}
+
+.btn-primary-hover-outline:hover {
+    color: #222222;
+    background: transparent;
+    border-width: 2px;
+    border-color: #336F6A; }
+
+#update-cart-btn{
+  color: white;
+  background: #336F6A;
+  border: 1px solid #336F6A;
+}
+
+#update-cart-btn:hover {
+    color: #222222;
+    background: transparent;
+    border-width: 2px;
+    border-color: #336F6A; }
+
+.btn-outline-black {
+  font-weight: bolder;
+  color: #2f2f2f;
+  background: #f9bf29;
+  border-color: #f9bf29; }
+.btn-outline-black:hover {
+  color: #ffff;
+  background: #314d43;
+  border-color: #314d43; }
+
+.p-to-c {
+  font-weight: bolder;
+  color: #ffff;
+  background: #314d43;
+  border-color: #314d43; }
+.p-to-c:hover {
+  color: #2f2f2f;
+  background: #f9bf29;
+  border-color: #f9bf29; }
 
 .section-title {
   color: #2f2f2f; }
