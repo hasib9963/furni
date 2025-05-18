@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit Profile{% endblock %}
+{% block head %}
+    <style>
+      .profile-edit-section {
+        padding: 7rem 0;
+      }
+      .profile-edit-card {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+      }
+      .profile-img-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .profile-img-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .img-upload-btn {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        margin-top: 15px;
+      }
+
+      .img-upload-btn:hover {
+        background: #28a745;
+        cursor: pointer;
+      }
+      .img-upload-btn input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+      }
+      .form-label {
+        color: #2f2f2f;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .form-control {
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+      }
+      .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+      .btn-save {
+        background: #2f2f2f;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-save:hover {
+        background: #28a745;
+      }
+      .btn-cancel {
+        background: #f8f9fa;
+        color: #2f2f2f;
+        border: 1px solid #e5e5e5;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-cancel:hover {
+        background: #489b94;
+        border: none;
+      }
+    </style>
+{% endblock %}
+
+{% block body %}
+  <body>
+    <!-- Profile Edit Section -->
+    <div class="profile-edit-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="profile-edit-card">
+              <h2 class="mb-4">Edit Profile</h2>
+              
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="profile-img-container">
+                      <img id="profile-img-preview" 
+                        src="{% if user.profile.profile_image %}{{ user.profile.profile_image.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                        class="profile-img-preview" 
+                        alt="Profile Image">
+                      <div class="img-upload-btn btn btn-outline-secondary mt-3">
+                        <i class="fas fa-camera mr-2"></i> Change Photo
+                        <input type="file" name="image" id="id_image" accept="image/*" onchange="previewImage(this)">
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-8">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="id_first_name" class="form-label">First Name</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 id="id_first_name" 
+                                 name="first_name" 
+                                 value="{{ user.first_name }}">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="id_last_name" class="form-label">Last Name</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 id="id_last_name" 
+                                 name="last_name" 
+                                 value="{{ user.last_name }}">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="id_email" class="form-label">Email</label>
+                      <input type="email" 
+                             class="form-control" 
+                             id="id_email" 
+                             name="email" 
+                             value="{{ user.email }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_mobile" class="form-label">Phone Number</label>
+                        <input type="text" 
+                                class="form-control" 
+                                id="id_mobile" 
+                                name="mobile" 
+                                value="{{ user.profile.mobile|default_if_none:'' }}">
+                    </div>
+
+                    
+                    <div class="form-group">
+                      <label for="id_address" class="form-label">Address</label>
+                      <textarea class="form-control" 
+                                id="id_address" 
+                                name="address" 
+                                rows="3">{{ user.profile.address|default:'' }}</textarea>
+                    </div>   
+                    <div class="form-group text-right">
+                      <a href="{% url 'profile' %}" class="btn btn-cancel mr-2">
+                        <i class="fas fa-times mr-2"></i> Cancel
+                      </a>
+                      <button type="submit" class="btn btn-save">
+                        <i class="fas fa-save mr-2"></i> Save Changes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Image preview function
+      function previewImage(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById('profile-img-preview').src = e.target.result;
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+      
+      // Initialize tooltips
+      document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>

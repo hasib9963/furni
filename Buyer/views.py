@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import  redirect, get_object_or_404
 from django.views.generic.edit import FormView
 from .forms import SignUpForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import logout, get_user_model
-from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
 
@@ -30,8 +29,8 @@ class SignUpView(FormView):
         # Send activation email
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        # confirm_link = f"http://127.0.0.1:8000/buyer/activate/{uid}/{token}/"
-        confirm_link = f"https://furni-qnpo.onrender.com/buyer/activate/{uid}/{token}/"
+        confirm_link = f"http://127.0.0.1:8000/activate/{uid}/{token}/"
+        # confirm_link = f"https://furni-qnpo.onrender.com/activate/{uid}/{token}/"
 
         email_subject = "Account Activation"
         email_body = render_to_string('confirmation_email.html', {
@@ -131,3 +130,73 @@ def user_logout_view(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect(reverse_lazy('home'))
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Profile
+from .forms import ProfileForm
+from Shop.models import Order
+
+@login_required
+def profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')  # or whatever field
+    return render(request, 'profile.html', {'profile': profile, 'orders': orders})
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if request.method == 'POST':
+        # Manually update both user and profile
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        user.save()
+
+        profile.mobile = request.POST.get('mobile')
+        profile.address = request.POST.get('address')
+        profile_image = request.FILES.get('image')
+        if profile_image:
+            profile.profile_image = profile_image
+        profile.save()
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'message': 'Your Profile Updated Successfully'}, status=200)
+        
+        messages.success(request, 'Your Profile Updated Successfully')
+        return redirect('profile')
+    
+    return render(request, 'edit_profile.html', {'user': user, 'profile': profile})
+
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+
+class PassChangeView(View):
+    template_name = 'password_change.html'
+
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = PasswordChangeForm(request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your Password Updated Successfully')
+
+            # Send email to the user
+            mail_subject = 'Password Change Notification'
+            message = render_to_string('password_change_message.html', {'user': request.user})
+            to_email = request.user.email
+            send_email = EmailMultiAlternatives(mail_subject, '', to=[to_email])
+            send_email.attach_alternative(message, "text/html")
+            send_email.send()
+
+            update_session_auth_hash(request, form.user)
+            return redirect('profile')
+
+        return render(request, self.template_name, {'form': form})

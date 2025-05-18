@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block head %}
+    <style>
+      .profile-section {
+        padding: 7rem 0;
+      }
+      .profile-card {
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+      }
+      .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+       .profile-img-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #f8f9fa;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .profile-name {
+        color: #2f2f2f;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .profile-email {
+        color: #6c757d;
+        margin-bottom: 20px;
+      }
+      .profile-details {
+        margin-bottom: 30px;
+      }
+      .detail-item {
+        display: flex;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .detail-icon {
+        color: #28a745;
+        width: 30px;
+        text-align: center;
+        margin-right: 15px;
+      }
+      .detail-content h5 {
+        color: #2f2f2f;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .detail-content p {
+        color: #6c757d;
+        margin-bottom: 0;
+      }
+      .orders-section {
+        margin-top: 40px;
+      }
+      .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .orders-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #e5e5e5;
+        font-weight: 600;
+      }
+      .orders-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+        vertical-align: middle;
+      }
+      .btn-edit {
+        background: #2f2f2f;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-edit:hover {
+        background: #489b94;
+      }
+
+      .btn-order {
+        background: #489b94;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-password {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-password:hover {
+        background:rgb(249, 7, 7);
+      }
+      
+      .button-row {
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      .status-badge {
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .status-completed {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .status-processing {
+        background-color: #cce5ff;
+        color: #004085;
+      }
+    </style>
+{% endblock %}
+{% block body %}
+  <body>
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="profile-card">
+              <div class="profile-header">
+                <img id="profile-img-preview" 
+                    src="{% if user.profile.profile_image %}{{ user.profile.profile_image.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                    class="profile-img-preview" 
+                    alt="Profile Image">
+                <h2 class="profile-name">{{ user.first_name }} {{user.last_name}}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <a href="{% url 'edit_profile' %}" class="btn btn-edit">
+                  <i class="fas fa-edit mr-2"></i> Edit Profile
+                </a>
+              </div>
+
+              <div class="profile-details">
+                <div class="detail-item">
+                  <div class="detail-icon">
+                    <i class="fas fa-envelope"></i>
+                  </div>
+                  <div class="detail-content">
+                    <h5>Email</h5>
+                    <p>{{ user.email }}</p>
+                  </div>
+                </div>
+
+                <div class="detail-item">
+                  <div class="detail-icon">
+                    <i class="fas fa-phone"></i>
+                  </div>
+                  <div class="detail-content">
+                    <h5>Mobile Number</h5>
+                    <p>{{ user.profile.mobile|default:"Not provided yet" }}</p>
+                  </div>
+                </div>
+
+                <div class="detail-item">
+                  <div class="detail-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <div class="detail-content">
+                    <h5>Address</h5>
+                    <p>
+                      {% if user.profile.address %}
+                        {{ user.profile.address }}<br>
+                        {{ user.profile.city }}, {{ user.profile.country }}<br>
+                        {{ user.profile.postal_code }}
+                      {% else %}
+                        No address provided
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+                <div class="orders-section">
+                    <div class="button-row">
+                        <a href="{% url 'user_orders' %}" class="btn btn-order">
+                            <i class="fas fa-box"></i> View Orders
+                        </a>
+                        <a href="{% url "pass_change" %}" class="btn btn-password">
+                            <i class="fas fa-key"></i> Change Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        {% for message in messages %}
+            showPopup("{{ message|escapejs }}");
+        {% endfor %}
+        });
+
+        function showPopup(message) {
+        const popup = document.createElement('div');
+        popup.textContent = message;
+        Object.assign(popup.style, {
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            backgroundColor: '#28a745',
+            color: '#fff',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            zIndex: '9999',
+            boxShadow: '0 0 10px rgba(0,0,0,0.3)',
+            transition: 'opacity 0.3s'
+        });
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 3000);
+        }
+    </script>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $('#editProfileForm').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'edit_profile' %}",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $('#popup-message').text(response.message).fadeIn().delay(2000).fadeOut();
+        },
+        error: function(xhr) {
+            alert("Something went wrong. Try again.");
+        }
+        });
+    });
+    </script>
+
+    {% endblock %}
+  </body>
+</html>
