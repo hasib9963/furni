@@ -67,6 +67,20 @@
         padding: 40px;
         color: #6c757d;
       }
+        .btn-cs {
+        background: #489b94;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+        border-radius: 50%%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      } 
+        .btn-cs:hover {
+        background: green;
+        color: #ffffff;
+      }
     </style>
 {% endblock %}
 {% block body %}
@@ -115,7 +129,7 @@
               {% else %}
               <div class="empty-orders">
                 <p>No orders found.</p>
-                <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+                <a href="{% url 'shop' %}" class="btn-cs btn">Continue Shopping</a>
               </div>
               {% endif %}
             </div>
