@@ -29,8 +29,8 @@ class SignUpView(FormView):
         # Send activation email
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        confirm_link = f"http://127.0.0.1:8000/activate/{uid}/{token}/"
-        # confirm_link = f"https://furni-qnpo.onrender.com/activate/{uid}/{token}/"
+        # confirm_link = f"http://127.0.0.1:8000/activate/{uid}/{token}/"
+        confirm_link = f"https://furni-qnpo.onrender.com/activate/{uid}/{token}/"
 
         email_subject = "Account Activation"
         email_body = render_to_string('confirmation_email.html', {
