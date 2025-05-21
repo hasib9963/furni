@@ -7,6 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Untree.co" />
     <link rel="shortcut icon" href="{% static 'favicon.png' %}" />
 
@@ -30,10 +31,11 @@
       class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark"
       arial-label="Furni navigation bar"
     > {% endcomment %}
-     <nav class="custom-navbar navbar navbar-expand-md navbar-dark fixed-top" aria-label="Furni navigation bar">
-      <div class="container">
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top custom-navbar" aria-label="Furni navigation bar">
+      <div class="container-fluid">
         <a class="navbar-brand" href="{% url "home" %}">Furni<span>.</span></a>
 
+        <!-- Fix: Change button's data-bs-target to match the div's ID -->
         <button
           class="navbar-toggler"
           type="button"
@@ -45,7 +47,6 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarsFurni">
           <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
             <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
@@ -270,16 +271,15 @@
     <script>
       const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) {
-          scrollToTopBtn.classList.add("show");
+      window.onscroll = function () {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+          scrollToTopBtn.style.display = "block";
         } else {
-          scrollToTopBtn.classList.remove("show");
+          scrollToTopBtn.style.display = "none";
         }
-      });
+      };
 
-      scrollToTopBtn.addEventListener("click", function (e) {
-        e.preventDefault();
+      scrollToTopBtn.addEventListener("click", function () {
         window.scrollTo({
           top: 0,
           behavior: "smooth"
